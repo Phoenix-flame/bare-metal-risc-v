@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug firmware (QEMU + GDB)",
+            "type": "gdb",
+            "request": "attach",
+            "executable": "${workspaceFolder}/build/firmware.elf",
+            "target": ":1234",
+            "remote": true,
+            "cwd": "${workspaceFolder}",
+            "gdbpath": "/usr/bin/gdb-multiarch",
+            "autorun": [
+                "set architecture riscv:rv64",
+                "break main",
+                "continue"
+            ],
+            "preLaunchTask": "qemu: debug server",
+            "postDebugTask": "kill qemu"
+        }
+    ]
+}

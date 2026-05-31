@@ -1,0 +1,64 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cmake: configure",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["-B", "build"],
+            "problemMatcher": []
+        },
+        {
+            "label": "cmake: build",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["--build", "build"],
+            "dependsOn": "cmake: configure",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "cmake: clean",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["--build", "build", "--target", "clean"],
+            "problemMatcher": []
+        },
+        {
+            "label": "qemu: run",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["--build", "build", "--target", "run"],
+            "dependsOn": "cmake: build",
+            "problemMatcher": []
+        },
+        {
+            "label": "qemu: debug server",
+            "detail": "Starts QEMU halted, waiting for GDB on :1234. Used by the debug launch config.",
+            "type": "shell",
+            "command": "qemu-system-riscv64 -machine virt -nographic -bios none -kernel '${workspaceFolder}/build/firmware.elf' -S -gdb tcp::1234 & echo QEMU_GDB_READY; wait",
+            "dependsOn": "cmake: build",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    { "regexp": ".", "file": 1, "location": 2, "message": 3 }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "QEMU_GDB_READY",
+                    "endsPattern": "QEMU_GDB_READY"
+                }
+            }
+        },
+        {
+            "label": "kill qemu",
+            "detail": "Stops the QEMU gdb server started for debugging.",
+            "type": "shell",
+            "command": "pkill -f 'qemu-system-riscv64.*firmware.elf' || true",
+            "problemMatcher": []
+        }
+    ]
+}

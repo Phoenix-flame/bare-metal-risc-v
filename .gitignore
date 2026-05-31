@@ -1,0 +1,7 @@
+firmware.bin
+firmware.dump
+firmware.elf
+firmware.map
+main.o
+startup.o
+build/*
