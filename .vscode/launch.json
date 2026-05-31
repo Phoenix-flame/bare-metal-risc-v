@@ -6,11 +6,13 @@
             "type": "gdb",
             "request": "attach",
             "executable": "${workspaceFolder}/build/firmware.elf",
-            "target": ":1234",
+            "target": "localhost:1234",
             "remote": true,
             "cwd": "${workspaceFolder}",
             "gdbpath": "/usr/bin/gdb-multiarch",
+            "valuesFormatting": "parseText",
             "autorun": [
+                "file ${workspaceFolder}/build/firmware.elf",
                 "set architecture riscv:rv64",
                 "break main",
                 "continue"

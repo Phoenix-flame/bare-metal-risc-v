@@ -32,9 +32,17 @@ set(COMMON_FLAGS -march=${ARCH} -mabi=${ABI} -mcmodel=${MODEL} -msmall-data-limi
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld)
 
 # --- Build the ELF ----------------------------------------------------------
-add_executable(firmware.elf
-    startup.s
-    main.c)
+# Collect C/asm sources from the project root and the source/ directory.
+# startup.s (which defines _start) lives at the root, so it MUST be included
+# here — otherwise the linker has no entry symbol and the firmware hangs before
+# reaching main. CONFIGURE_DEPENDS re-globs when files are added/removed.
+file(GLOB SOURCES CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/*.s
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/*.s)
+
+add_executable(firmware.elf ${SOURCES})
 
 target_include_directories(firmware.elf PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include)

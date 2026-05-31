@@ -17,7 +17,7 @@ static void delay(volatile uint64_t count)
 int main(void)
 {
     uninitialized_data = initialized_data;
-    uart_puts("Hello from RISC-V bare metal!\n");
+    
     while (1)
     {
         counter++;
